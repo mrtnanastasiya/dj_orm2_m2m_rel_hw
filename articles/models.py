@@ -16,13 +16,7 @@ class Article(models.Model):
     text = models.TextField(verbose_name='Текст')
     published_at = models.DateTimeField(verbose_name='Дата публикации')
     image = models.ImageField(null=True, blank=True, verbose_name='Изображение')
-    # поле tags будет перечислять все записи из таблицы Tag,
-    # связанные с какой-то статьей, а тоо как они связаны будет задано в таблице ArticleTag
     tags = models.ManyToManyField(Tag, through='ArticleTag')
-    # Если мы хотим получить не список тегов для какой-то статьи,
-    # а более обширные сведения из таблицы ArticleTag, например,
-    # свойство is_main (является ли этот тег основным для статьи),
-    # то мы должны использовать не article.tags, а article.articletag_set.all()
 
     class Meta:
         verbose_name = 'Статья'
@@ -32,8 +26,6 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
-# Вместо того, чтобы позволить джанго придумать и создать кросс-таблицу
-# мы прописали ее вручную
 class ArticleTag(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
